@@ -1,0 +1,40 @@
+flowchart TD
+    subgraph DataIngestion
+        A1["MIMIC-CXR CSV"] -->|extract_mimic_cxr.py| B1["Cleaned CXR JSONL"]
+        A2["PubMed JSON"] -->|download_pubmed.py| B2["Cleaned PubMed JSONL"]
+        A3["DICOM Images"] -->|dicom_to_jpeg.py| B3["JPEG Images"]
+    end
+    subgraph Preprocessing
+        B1 -->|preprocess_cxr.py| C1["CXR Chunks"]
+        B2 -->|preprocess_pubmed.py| C2["PubMed Chunks"]
+        B3 -->|preprocess_images.py| C3["Processed JPEGs"]
+    end
+    subgraph Embedding
+        C1 -->|embed_text.py| D1["Text Embeddings"]
+        C2 -->|embed_text.py| D2["Text Embeddings"]
+        C3 -->|embed_images.py| D3["Image Embeddings"]
+    end
+    subgraph Indexing
+        D1 -->|faiss_index.py| E1["FAISS Index"]
+        D2 -->|faiss_index.py| E1
+        D3 -->|faiss_index.py| E1
+    end
+    subgraph RAG
+        E1 -->|retriever.py| F1["Top-k Chunks"]
+        F1 -->|prompt_builder.py| G1["Prompt"]
+        G1 -->|generator.py| H1["LLM Answer"]
+    end
+    subgraph Finetune
+        QA["QA Pairs"] -->|lora_finetune.py| LORA["LoRA Adapter"]
+        LORA -->|generator.py| H1
+    end
+    subgraph Evaluation
+        E1 -->|retrieval_metrics.py| M1["Recall@5"]
+        H1 -->|qa_metrics.py| M2["Exact Match"]
+        H1 -->|latency_metrics.py| M3["Latency/QPS"]
+    end
+    subgraph Deployment
+        H1 -->|streamlit_app.py| UI["Streamlit UI"]
+        E1 -->|drive_utils.py| GD["Google Drive"]
+        LORA -->|drive_utils.py| GD
+    end 

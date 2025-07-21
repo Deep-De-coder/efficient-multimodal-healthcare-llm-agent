@@ -1,0 +1,19 @@
+# Core dependencies
+transformers
+peft
+faiss-cpu
+pydicom
+opencv-python
+numpy
+tqdm
+pillow
+streamlit
+# For vLLM and FlashAttention
+vllm
+flash-attn
+# For CLIP
+ftfy
+regex
+# For distributed training and efficient model management
+deepseed
+pytorch-lightning 
