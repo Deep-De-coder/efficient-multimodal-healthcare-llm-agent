@@ -1,0 +1,8 @@
+{
+  "faiss_index_path": "data/faiss_index.faiss",
+  "metadata_path": "data/metadata.jsonl",
+  "embeddings_path": "data/medical_embeddings.npy",
+  "qa_pairs_path": "data/formatted_qa_pairs.jsonl",
+  "default_model": "microsoft/DialoGPT-medium",
+  "default_k": 5
+}

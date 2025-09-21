@@ -32,8 +32,11 @@ def embed_texts(input_path, output_emb_path, output_meta_path, model_name, batch
     all_embs = np.concatenate(all_embs, axis=0)
     np.save(output_emb_path, all_embs)
     with open(output_meta_path, 'w', encoding='utf-8') as f:
-        for meta in metas:
-            f.write(json.dumps(meta) + '\n')
+        for i, meta in enumerate(metas):
+            # Include the original text in metadata for retrieval
+            meta_with_text = meta.copy()
+            meta_with_text['text'] = texts[i]
+            f.write(json.dumps(meta_with_text) + '\n')
     logging.info(f"Saved embeddings to {output_emb_path} and metadata to {output_meta_path}")
 
 def main():
